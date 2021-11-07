@@ -1,3 +1,6 @@
+% much of this script is copied from:
+% https://www.mathworks.com/help/deeplearning/ug/transfer-learning-using-pretrained-network.html
+
 clear
 close all
 dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20211028\';
@@ -7,6 +10,10 @@ size_string = '12mm';
 
 % set writepath 
 ReadPath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\built_data\20211028\' size_string filesep];
+
+% set save path
+SavePath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\classifiers\20211028\' size_string filesep];
+mkdir(SavePath)
 
 % define image augmenter
 imageAugmenter = imageDataAugmenter( ...
@@ -68,3 +75,12 @@ options = trainingOptions('sgdm', ...
   
 % TRAIN
 netTransfer = trainNetwork(augimdsTrain,lgraph,options);
+
+
+[YPred,scores] = classify(netTransfer,augimdsValidation);
+
+YValidation = imdsValidation.Labels;
+accuracy = mean(YPred == YValidation)
+
+% save this network
+save([SavePath 'network_v1.mat'],'netTransfer')
