@@ -6,7 +6,7 @@ close all
 dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20211028\';
 
 % specify aggregate size to use
-size_string = '12mm';
+size_string = '5001mm';
 
 % set writepath 
 ReadPath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\built_data\20211028\' size_string filesep];
@@ -15,12 +15,12 @@ ReadPath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\built_data\2021102
 SavePath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\classifiers\20211028\' size_string filesep];
 mkdir(SavePath)
 
+
 % define image augmenter
 imageAugmenter = imageDataAugmenter( ...
-    'RandRotation',[-90 90], ...
-    'RandScale',[1 2]);
+    'RandRotation',[-90 90]);
 
-inputSize = [256 256 3]; 
+inputSize = [224 224 3]; 
   
 % generate datastore object
 sandImds = imageDatastore(ReadPath, ...
@@ -37,7 +37,7 @@ sandImdsAug = augmentedImageDatastore(inputSize, sandImds,...
 % define NN 
 net = googlenet;
 
-%% adjust architecture to work with our class number
+% adjust architecture to work with our class number
 lgraph = layerGraph(net); 
 numClasses = numel(categories(imdsTrain.Labels));
 % define new layer
@@ -81,6 +81,13 @@ netTransfer = trainNetwork(augimdsTrain,lgraph,options);
 
 YValidation = imdsValidation.Labels;
 accuracy = mean(YPred == YValidation)
+
+
+% Tabulate the results using a confusion matrix.
+confMat = confusionmat(YValidation, YPred);
+
+% Convert confusion matrix into percentage form
+confMat = bsxfun(@rdivide,confMat,sum(confMat,2));
 
 % save this network
 save([SavePath 'network_v1.mat'],'netTransfer')

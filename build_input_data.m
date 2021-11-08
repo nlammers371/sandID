@@ -3,7 +3,7 @@ close all
 dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20211028\';
 
 % specify aggregate size to use
-size_string = '12mm';
+size_string = '5001mm';
 file_list = dir([dataFolder '*' size_string '*jpg']);
 
 % set writepath 
@@ -11,7 +11,7 @@ OutPath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\built_data\20211028
 mkdir(OutPath)
 
 % specify granularity to use for chopping samples into finer grids
-snip_size = 256;
+snip_size = 224;
 
 for f = 1:length(file_list)
     fname = file_list(f).name;
