@@ -1,13 +1,13 @@
 clear
 close all
-dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20211028\';
+dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20211124\';
 
 % specify aggregate size to use
-size_string = '5001mm';
+size_string = 'sand';
 file_list = dir([dataFolder '*' size_string '*jpg']);
 
 % set writepath 
-OutPath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\built_data\20211028\' size_string filesep];
+OutPath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\built_data\20211124\' size_string filesep];
 mkdir(OutPath)
 
 % specify granularity to use for chopping samples into finer grids
@@ -32,7 +32,7 @@ for f = 1:length(file_list)
     sz_vec = size(im_raw_bg(:,:,1));
     
     % get circle diam
-    circ_rad = floor(0.45*min(size(im_raw_bg(:,:,1))));
+    circ_rad = floor(0.42*min(size(im_raw_bg(:,:,1))));
     
     % find image center
     ct = ceil(size(im_raw_bg(:,:,1))/2);

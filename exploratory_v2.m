@@ -3,16 +3,16 @@
 
 clear
 close all
-dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20211028\';
+dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20211124\';
 
 % specify aggregate size to use
-size_string = '5001mm';
+size_string = 'sand';
 
 % set writepath 
-ReadPath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\built_data\20211028\' size_string filesep];
+ReadPath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\built_data\20211124\' size_string filesep];
 
 % set save path
-SavePath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\classifiers\20211028\' size_string filesep];
+SavePath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\classifiers\20211124\' size_string filesep];
 mkdir(SavePath)
 
 
