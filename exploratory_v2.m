@@ -3,16 +3,21 @@
 
 clear
 close all
-dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20211124\';
+dataRoot = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier';
+if ~exist(dataRoot)
+    dataRoot = 'S:\Nick\Dropbox (Personal)\sandClassifier\';
+end
+
+dataFolder = [dataRoot '\raw_data\20211124\'];
 
 % specify aggregate size to use
 size_string = 'sand';
 
 % set writepath 
-ReadPath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\built_data\20211124\' size_string filesep];
+ReadPath = [dataRoot '\built_data\20211124\' size_string filesep];   
 
 % set save path
-SavePath = ['C:\Users\nlamm\Dropbox (Personal)\sandClassifier\classifiers\20211124\' size_string filesep];
+SavePath = [dataRoot '\classifiers\20211124_v2\' size_string filesep];
 mkdir(SavePath)
 
 
@@ -31,6 +36,16 @@ sandImds = imageDatastore(ReadPath, ...
 sandImdsAug = augmentedImageDatastore(inputSize, sandImds,...
                       'DataAugmentation', imageAugmenter);
 
+% balance classes
+tbl = countEachLabel(sandImds);
+
+% Determine the smallest amount of images in a category
+minSetCount = min(tbl{:,2}); 
+
+% Use splitEachLabel method to trim the set.
+sandImds = splitEachLabel(sandImds, minSetCount, 'randomize');
+%%
+                    
 % divide data into training and validation sets
 [imdsTrain, imdsValidation] = splitEachLabel(sandImds,0.7,'randomized');
                         
