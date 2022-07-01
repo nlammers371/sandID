@@ -25,7 +25,7 @@ OutPath = ['C:\Users\nlamm\Dropbox (Personal)\sandID\built_data\20211124\' size_
 mkdir(OutPath)
 wb = waitbar(0,'generating image snips...');
 for f = 1:length(file_list)
-    waitbar(f/length(file_list),wb);
+    waitbar(wb,f/length
     fname = file_list(f).name;
     
     % extract basic image ID info
@@ -90,5 +90,4 @@ for f = 1:length(file_list)
             imwrite(snip_cell{s},[savePath save_string]);
         end
     end
-end   
-delete(wb);
+end                                                                               

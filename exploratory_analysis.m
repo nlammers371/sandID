@@ -1,12 +1,12 @@
 clear
 close all
-dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20210918\';
+dataFolder = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\raw_data\20220419\';
 file_list = dir([dataFolder '*jpg']);
 data_struct = struct;
 FigPath = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier\exploratory\';
 mkdir(FigPath)
 % identify region suitable for classification
-filter_size = 10;
+filter_size = 15;
 
 for f = 1:length(file_list)
     data_struct(f).im_raw_bg = imread([dataFolder file_list(f).name]);
@@ -73,6 +73,7 @@ xlabel('principle component 1')
 ylabel('principle component 2')
 ylabel(h,'sample ID')
 saveas(pca_fig12,[FigPath 'pca_12.png'])
+saveas(pca_fig12,[FigPath 'pca_12.pdf'])
 
 pca_fig13 = figure;
 hold on
@@ -90,6 +91,7 @@ xlabel('principle component 1')
 ylabel('principle component 3')
 ylabel(h,'sample ID')
 saveas(pca_fig13,[FigPath 'pca_13.png'])
+saveas(pca_fig13,[FigPath 'pca_13.pdf'])
 
 pca_fig23 = figure;
 hold on
@@ -107,6 +109,7 @@ xlabel('principle component 2')
 ylabel('principle component 3')
 ylabel(h,'sample ID')
 saveas(pca_fig23,[FigPath 'pca_23.png'])
+saveas(pca_fig23,[FigPath 'pca_23.pdf'])
 
 %%
 close all
@@ -130,3 +133,24 @@ zlabel('PC 3')
 ylabel(h,'sample ID')
 view(30,15)
 saveas(pca_fig,[FigPath 'pca_3D.png'])
+
+
+pca_fig = figure;
+hold on
+cmap1 = brewermap(length(data_struct),'Spectral');
+colormap(cmap1);
+
+for i = fliplr(1:length(data_struct))
+    scatter3(pixel_val_array(image_id_vec==i,1),pixel_val_array(image_id_vec==i,2),pixel_val_array(image_id_vec==i,3),...
+          [],'MarkerFaceColor',cmap1(i,:),'MarkerEdgeColor','k','MarkerFaceAlpha',0.15,'MarkerEdgeAlpha',0)
+end
+inc = 1/length(data_struct)/2;
+h = colorbar('YTick',linspace(inc,1-inc,length(data_struct)),'YTickLabel', 1:length(data_struct));
+set(gca,'Fontsize',14)
+grid on
+xlabel('red')
+ylabel('green')
+zlabel('blue')
+ylabel(h,'sample ID')
+view(30,15)
+saveas(pca_fig,[FigPath 'rgb_3D.png'])
