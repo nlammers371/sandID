@@ -3,9 +3,9 @@
 
 clear
 close all
-dataRoot = 'C:\Users\nlamm\Dropbox (Personal)\sandID';
+dataRoot = 'C:\Users\nlamm\Dropbox (Personal)\sandClassifier';
 if ~exist(dataRoot)
-    dataRoot = 'S:\Nick\Dropbox (Personal)\sandID\';
+    dataRoot = 'S:\Nick\Dropbox (Personal)\sandClassifier\';
 end
 
 dataFolder = [dataRoot '\raw_data\20211124\'];
