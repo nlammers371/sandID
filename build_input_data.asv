@@ -1,19 +1,22 @@
 clear
 close all
-dataRoot = 'C:\Users\nlamm\Dropbox (Personal)\sandID\raw_data\';'..\sandID\raw_data\';
+dataRoot = '..\raw_data\';
+% dateString = '20211028';
 dateString = '20211124';
 dataFolder = [dataRoot dateString filesep];
 
 % load in table with region categories
-image_key = readtable([dataFolder 'image_key.csv']);
+image_key = readtable([dataRoot 'image_key.csv']);
 % image_key = readtable('20211124\image_key.csv');
 
 % specify granularity to use for chopping samples into finer grids
-snip_size = 128;
+snip_size = 224;
+grain_size = 'sand';
+scale_factor = 224/snip_size;
 
 % specify aggregate size to use
-size_string = ['sand_' num2str(snip_size)];
-file_list = dir([dataFolder '*sand*jpg']);
+snip_size_string = [num2str(grain_size) '_' num2str(snip_size)];
+file_list = dir([dataFolder '*' num2str(grain_size) '*jpg']);
 
 % extract key info
 valid_name_cell = image_key.string;
@@ -21,11 +24,11 @@ region_string_cell = image_key.region;
 region_id_cell = image_key.region_code;
 
 % set writepath 
-OutPath = ['C:\Users\nlamm\Dropbox (Personal)\sandID\built_data\20211124\' size_string filesep];
+OutPath = ['..\built_data\' dateString filesep snip_size_string filesep];
 mkdir(OutPath)
 wb = waitbar(0,'generating image snips...');
 for f = 1:length(file_list)
-    waitbar(wb,f/length
+    waitbar(f/length(file_list),wb);
     fname = file_list(f).name;
     
     % extract basic image ID info
@@ -87,7 +90,10 @@ for f = 1:length(file_list)
         % save snips 
         for s = 1:length(snip_cell)
             save_string = ['im_' source_string_2 '_' sprintf('%03d',sample_num) '_' sprintf('%03d',s) '.jpg'];
-            imwrite(snip_cell{s},[savePath save_string]);
+            snip = snip_cell{s};
+            snip_rs = imresize(snip,scale_factor);
+            imwrite(snip_rs,[savePath save_string]);
         end
     end
-end                                                                               
+end   
+delete(wb);
