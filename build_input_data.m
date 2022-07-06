@@ -21,7 +21,7 @@ region_string_cell = image_key.region;
 region_id_cell = image_key.region_code;
 
 % set writepath 
-OutPath = ['C:\Users\nlamm\Dropbox (Personal)\sandID\built_data\20211124\' size_string filesep];
+OutPath = ['C:\Users\nlamm\Dropbox (Personal)\sandID\built_data\' dateString filesep  size_string filesep];
 mkdir(OutPath)
 wb = waitbar(0,'generating image snips...');
 for f = 1:length(file_list)

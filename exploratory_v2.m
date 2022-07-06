@@ -15,10 +15,10 @@ snip_size = 128;
 load_string = ['sand_' num2str(snip_size)];
 
 % set writepath 
-ReadPath = [dataRoot '\built_data\20211124\' load_string filesep];   
+ReadPath = [dataRoot '\built_data\' dateString filesep load_string filesep];   
 
 % set save path
-SavePath = [dataRoot '\classifiers\20211124_v2\' load_string filesep];
+SavePath = [dataRoot '\classifiers\' dateString filesep load_string filesep];
 mkdir(SavePath)
 
 
