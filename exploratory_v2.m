@@ -26,7 +26,7 @@ mkdir(SavePath)
 imageAugmenter = imageDataAugmenter( ...
     'RandRotation',[-90 90]);
 
-inputSize = [224 224 3]; 
+inputSize = [snip_size snip_size 3]; 
   
 % generate datastore object
 sandImds = imageDatastore(ReadPath, ...
