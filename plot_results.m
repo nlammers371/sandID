@@ -1,5 +1,7 @@
-clear
+% clear
 close all
+
+addpath(genpath('./utilities'))
 
 dateString = '20211124';
 grain_size = 'sand';
@@ -11,7 +13,7 @@ snip_size = 176;
 load_string = [num2str(grain_size) '_' num2str(snip_size)];
 
 % set writepath 
-DataPath = ['..\built_data' filesep dateString filesep load_string filesep];   
+% DataPath = ['..\built_data' filesep dateString filesep load_string filesep];   
 
 % set save path
 ReadPath = ['..\classifiers\googlenet_v1\' load_string filesep];
@@ -20,27 +22,12 @@ figPath = ['..\fig' filesep dateString filesep load_string filesep];
 mkdir(figPath)
 
 % load this network
-load([ReadPath 'network_v1.mat'],'netTransfer')
-
-% set input size
-inputSize = [224 224 3]; 
-  
-% generate datastore object
-sandImds = imageDatastore(DataPath, ...
-                          'IncludeSubfolders',true, ...
-                          'LabelSource','foldernames');
-
-              
-tic
-[YPred,scores] = classify(netTransfer,sandImds);
-toc
-
-YValidation = sandImds.Labels;
-accuracy = mean(YPred == YValidation);
+load([ReadPath 'results_struct.mat'],'results_struct')
 
 % Generate figures
+
 % Tabulate the results using a confusion matrix.
-confMat = confusionmat(YValidation, YPred);
+confMat = results_struct.confMat;
 
 % Convert confusion matrix into percentage form
 confMat = bsxfun(@rdivide,confMat,sum(confMat,2));
@@ -61,24 +48,12 @@ xlabel('assigned to')
 
 set(gca,'Fontsize',14)
 
-saveas(fig1,[FigPath 'confusion_matrix.png'])
+saveas(fig1,[figPath 'confusion_matrix.png'])
 
-% %% 
-% tic
-% act = activations(netTransfer,sandImds,'new_fc');
-% toc
 
-%% Extract layer activations
 
-tic
-act2 = activations(netTransfer,sandImds,'pool5-drop_7x7_s1');
-toc
-
-rng(335); % for reproducibility
-
-tic
-tsne_scores = tsne(squeeze(act2)');
-toc
+% Make tsne plot
+tsne_scores = results_struct.tsne_scores;
 
 % generate finer-grained SA labels
 lb_vec = sandImds.Labels;
@@ -95,8 +70,8 @@ s = gscatter(tsne_scores(:,1),tsne_scores(:,2),lb_vec,[],[],15);
 xlabel('tsne component 1')
 ylabel('tsne component 2')
 
-saveas(tsne_fig,'tsne_plot.png')
-saveas(tsne_fig,'tsne_plot.pdf')
+saveas(tsne_fig,[figPath 'tsne_plot.png'])
+saveas(tsne_fig,[figPath 'tsne_plot.pdf'])
 % legend(s,'AB','AR','CRL','CRUH','CRUP','LR','SA');
 
 % icons = findobj(H, 'type', 'patch'); % doesn't work
