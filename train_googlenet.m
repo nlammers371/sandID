@@ -28,7 +28,7 @@ for g = 1:length(grain_size_cell)
     ReadPath = ['..\built_data' filesep dateString filesep load_string filesep];   
     
     % set save path
-    SavePath = ['..\classifiers\googlenet_v1\' load_string filesep];
+    SavePath = ['..\classifiers\googlenet_v2\' load_string filesep];
     mkdir(SavePath)
     
     
@@ -91,7 +91,7 @@ for g = 1:length(grain_size_cell)
     
     options = trainingOptions('sgdm', ...
                               'MiniBatchSize',10, ...
-                              'MaxEpochs',8, ...
+                              'MaxEpochs',12, ...
                               'InitialLearnRate',1e-4, ...
                               'Shuffle','every-epoch', ...
                               'ValidationData',augimdsValidation, ...
@@ -117,4 +117,7 @@ for g = 1:length(grain_size_cell)
     
     % save this network
     save([SavePath 'network_v1.mat'],'netTransfer')
+    % save training and testing datastores
+    save([SavePath 'imdsValidation.mat'],'augimdsValidation')
+    save([SavePath 'imdsTraining.mat'],'augimdsTrain')
 end
