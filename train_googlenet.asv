@@ -7,17 +7,20 @@ close all
 % if ~exist(dataRoot)
 %     dataRoot = 'S:\Nick\Dropbox (Personal)\sandID\';
 % end
-dateString = '20211028';
+% dateString = '20211028';
+dateString = '20211124';
 dataFolder = ['..\raw_data' filesep dateString filesep];
 
-rng(236) % for reproducibility
 
 % specify aggregate size to use
 snip_size = 176;
+% grain_size_cell = {'500','5001','12mm','_2mm'};
+grain_size_cell = {'sand'};
 
-grain_size_cell = {'500','5001','12mm','_2mm'};
 for g = 1:length(grain_size_cell)
-  
+      
+    rng(236); % for reproducibility
+
     grain_size = grain_size_cell{g};
     load_string = [num2str(grain_size) '_' num2str(snip_size)];
     
@@ -25,7 +28,7 @@ for g = 1:length(grain_size_cell)
     ReadPath = ['..\built_data' filesep dateString filesep load_string filesep];   
     
     % set save path
-    SavePath = ['..\classifiers\googlenet_v1\' load_string filesep];
+    SavePath = ['..\classifiers\googlenet_v2\' load_string filesep];
     mkdir(SavePath)
     
     
@@ -77,8 +80,8 @@ for g = 1:length(grain_size_cell)
     % define data augmenter
     imageAugmenter = imageDataAugmenter( ...
                         'RandXReflection',true, ...
-                        'RandRotation',[-90 90], ...
-                        'RandScale',[1 2]);
+                        'RandYReflection',true, ...
+                        'RandRotation',[-90 90]);
                       
     augimdsTrain = augmentedImageDatastore(inputSize,imdsTrain, ...
                     'DataAugmentation',imageAugmenter);
@@ -88,7 +91,7 @@ for g = 1:length(grain_size_cell)
     
     options = trainingOptions('sgdm', ...
                               'MiniBatchSize',10, ...
-                              'MaxEpochs',6, ...
+                              'MaxEpochs',8, ...
                               'InitialLearnRate',1e-4, ...
                               'Shuffle','every-epoch', ...
                               'ValidationData',augimdsValidation, ...
@@ -114,4 +117,7 @@ for g = 1:length(grain_size_cell)
     
     % save this network
     save([SavePath 'network_v1.mat'],'netTransfer')
+    % save training and testing datastores
+    save([SavePath 'imdsValidation.mat'],'augimdsValidation')
+    save([SavePath 'imdsT.mat'],'netTransfer')
 end
