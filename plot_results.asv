@@ -8,7 +8,7 @@ grain_size = 'sand';
 dataFolder = ['..\raw_data' filesep dateString filesep];   
 
 % Add colors
-color_lb_cell = {'SAPOT','SAPSS','SA','AB','AR','CRL','CRUP','CRUH','LR'};
+color_lb_cell = {'SAPOT','SAPSS','SA','AB','AM','CRL','CRUP','CRUH','LR'};
 % sap_orig = 84.03,22.59,100,8.69;
 color_array = [84.03,22.59,100,8.69;
                22.5, 20.12,88.75,0;
@@ -114,7 +114,7 @@ end
 xlabel('tsne component 1')
 ylabel('tsne component 2')
 set(gca,'Fontsize',14)
-h = legend(s,color_lb_cell{:},'Location','southwest');
+h = legend(s,color_lb_cell{:},'Location','northwest');
 set(h,'FontSize',8);
 
 grid on
@@ -129,38 +129,13 @@ saveas(tsne_fig,[figPath 'tsne_plot.pdf'])
 %icons = findobj(H, '-property', 'Marker', '-and', '-not', 'Marker', 'none'); % also doesn't work
 
 %%
-
 umap_fig = figure;
 cmap1 = flipud(brewermap([],'Spectral'));
 colormap(cmap1);
-hold on
-s = [];
-for i = 1:size(color_array_rgb,1)    
-    lb = categorical(color_lb_cell(i));
-    lb_filter = lb_vec==lb;
-    s(end+1) = scatter(results_struct.umap_scores(lb_filter,1),results_struct.umap_scores(lb_filter,2),20,'MarkerFaceColor',...
-              color_array_rgb(i,:),'MarkerEdgeAlpha',0.1,'MarkerEdgeColor','k','MarkerFaceAlpha',0.75);
-end    
+
+s = gscatter(results_struct.umap_scores(:,1),results_struct.umap_scores(:,2),lb_vec,[],[],15);
 xlabel('UMAP component 1')
 ylabel('UMAP component 2')
-set(gca,'Fontsize',14)
-h = legend(s,color_lb_cell{:},'Location','southwest');
-set(h,'FontSize',8);
 
-grid on
-% ylim([-50 50])
-xlim([-15 15])
-
-saveas(umap_fig,[figPath 'UMAP_plot.png'])
-saveas(umap_fig,[figPath 'UMAP_plot.pdf'])
-% 
-% umap_fig = figure;
-% cmap1 = flipud(brewermap([],'Spectral'));
-% colormap(cmap1);
-% 
-% s = gscatter(results_struct.umap_scores(:,1),results_struct.umap_scores(:,2),lb_vec,[],[],15);
-% xlabel('UMAP component 1')
-% ylabel('UMAP component 2')
-% 
-% saveas(tsne_fig,[figPath 'umap_plot.png'])
-% saveas(tsne_fig,[figPath 'umap_plot.pdf'])
+saveas(tsne_fig,[figPath 'umap_plot.png'])
+saveas(tsne_fig,[figPath 'umap_plot.pdf'])
