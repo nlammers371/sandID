@@ -7,28 +7,30 @@ close all
 % if ~exist(dataRoot)
 %     dataRoot = 'S:\Nick\Dropbox (Personal)\sandID\';
 % end
-% dateString = '20211028';
-dateString = '20211124';
+dateString = '20211028';
+% dateString = '20211124';
 dataFolder = ['..\raw_data' filesep dateString filesep];
 
 
 % specify aggregate size to use
 snip_size = 176;
-% grain_size_cell = {'500','5001','12mm','_2mm'};
-grain_size_cell = {'sand'};
+grain_size_cell = {'500'};%,'5001','12mm','_2mm'};
+% grain_size_cell = {'sand'};
+% suffix = '';
+suffix ='no_sap';
 
 for g = 1:length(grain_size_cell)
       
     rng(236); % for reproducibility
 
     grain_size = grain_size_cell{g};
-    load_string = [num2str(grain_size) '_' num2str(snip_size)];
+    load_string = [num2str(grain_size) '_' num2str(snip_size) '_' suffix];
     
     % set writepath 
-    ReadPath = ['..\built_data' filesep dateString filesep load_string filesep];   
+    ReadPath = ['..\built_data_v2' filesep dateString filesep load_string filesep];   
     
     % set save path
-    SavePath = ['..\classifiers\googlenet_v2\' load_string filesep];
+    SavePath = ['..\classifiers\googlenet_v3\' load_string filesep];
     mkdir(SavePath)
     
     

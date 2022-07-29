@@ -1,12 +1,12 @@
 clear
 close all
 dataRoot = '..\raw_data\';
-% dateString = '20211028';
-dateString = '20211124';
+dateString = '20211028';
+% dateString = '20211124';
 dataFolder = [dataRoot dateString filesep];
 
 % load in table with region categories
-image_key = readtable([dataRoot 'image_key.csv']);
+image_key = readtable([dataRoot 'image_key_v2.csv']);
 % image_key = readtable('20211124\image_key.csv');
 
 % specify granularity to use for chopping samples into finer grids
@@ -28,7 +28,7 @@ for g = 1:length(grain_size_cell)
     region_id_cell = image_key.region_code;
     
     % set writepath 
-    OutPath = ['..\built_data\' dateString filesep snip_size_string filesep];
+    OutPath = ['..\built_data_v2\' dateString filesep snip_size_string filesep];
     mkdir(OutPath)
     wb = waitbar(0,'generating image snips...');
     for f = 1:length(file_list)
