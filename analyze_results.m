@@ -2,27 +2,29 @@ clear
 close all
 
 addpath(genpath('./utilities'));
-dateString = '20211028';
-% dateString = '20211124';
-% grain_size = 'sand';
-dataFolder = ['..\raw_data' filesep dateString filesep];
 
-% specify aggregate size to use
-snip_size = 176;
+%%%%%%%%%%%%%%%%%%%%
+% Use these parameters for Fig 7A
+grain_size_cell = {'sand_snips'};
 
-grain_size_cell = {'500'};%,'5001','12mm','_2mm'};
-% grain_size_cell = {'sand'};
+%%%%%%%%%%%%%%%%%%%%
+% Use these parameters for Fig 7B
+% grain_size_cell = {'500_snips'};
+
+snip_size = 176; % Do not change
+suffix = '';
+% suffix = '_no_sap';
 
 for g = 1:length(grain_size_cell)
     grain_size = grain_size_cell{g};
 
-    load_string = [num2str(grain_size) '_' num2str(snip_size)];
+    load_string = [num2str(grain_size) '_' num2str(snip_size)  suffix];
 
     % set writepath 
-    DataPath = ['..\built_data_v2' filesep dateString filesep load_string filesep];   
+    DataPath = ['.\data' filesep load_string filesep];   
     
     % set save path
-    ReadPath = ['..\classifiers\googlenet_v3\' load_string filesep];
+    ReadPath = ['.\classifiers\googlenet_v3\' load_string filesep];
         
     % load this network
     load([ReadPath 'network_v1.mat'],'netTransfer')
@@ -77,5 +79,5 @@ for g = 1:length(grain_size_cell)
     [results_struct.umap_scores, umap, results_struct.umap_cluster_ids, extras] = run_umap(results_struct.nn_activations,'verbose','none');
     toc
 
-    save([ReadPath 'results_struct.mat'],'results_struct')
+%     save([ReadPath 'results_struct.mat'],'results_struct')
 end

@@ -3,9 +3,7 @@ close all
 
 addpath(genpath('./utilities'))
 
-dateString = '20211124';
 grain_size = 'sand';
-dataFolder = ['..\raw_data' filesep dateString filesep];   
 
 % Add colors
 color_lb_cell = {'SAPOT','SAPSS','SA','AB','AR','CRL','CRUP','CRUH','LR'};
@@ -35,18 +33,19 @@ sapss = brighten(sap_orig,0.25);
 sapot = brighten(sap_orig,-0.25);
 color_array_rgb(1,:) = sapss;
 color_array_rgb = [sapot ;  color_array_rgb];
+
 % specify aggregate size to use
 snip_size = 176;
 
-load_string = [num2str(grain_size) '_' num2str(snip_size)];
+load_string = [num2str(grain_size) '_snips_' num2str(snip_size)];
 
 % set path to data
-DataPath = ['..\built_data' filesep dateString filesep load_string filesep];
+DataPath = ['.\data' filesep load_string filesep];
 
 % set save path
-ReadPath = ['..\classifiers\googlenet_v2\' load_string filesep];
+ReadPath = ['.\classifiers\googlenet_v3\' load_string filesep];
 
-figPath = ['..\fig' filesep dateString filesep load_string filesep];
+figPath = ['.\fig' filesep load_string filesep];
 mkdir(figPath)
 
 % load this network
@@ -97,6 +96,17 @@ sapot_flags = contains(sandImds.Files,'POT');
 sapss_flags = contains(sandImds.Files,'PSS');
 lb_vec(sapot_flags) = categorical({'SAPOT'});
 lb_vec(sapss_flags) = categorical({'SAPSS'});
+
+%%
+correct_fractions = diag(confMat);
+bulk_accuracy = mean(correct_fractions)
+% combine CR sources
+bulk_accuracy_cr = correct_fractions;
+bulk_accuracy_cr(4) = bulk_accuracy_cr(4) + confMat(4,5);
+bulk_accuracy_cr(5) = bulk_accuracy_cr(5) + confMat(5,4);
+bulk_accuracy_cr(4) = mean([bulk_accuracy_cr(4) bulk_accuracy_cr(5)]);
+bulk_accuracy_cr = [bulk_accuracy_cr(1:4) ; bulk_accuracy_cr(6:end)];
+bulk_accuracy_cr = mean(bulk_accuracy_cr)
 
 %%
 % close all

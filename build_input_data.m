@@ -1,21 +1,28 @@
 clear
 close all
 dataRoot = '..\raw_data\';
-dateString = '20211028';
-% dateString = '20211124';
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Generate data for Fig 7A
+dateString = '20211124';
+grain_size_cell = {'sand_'};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Generate data for Fig 7B
+% grain_size_cell = {'500_'};
+% dateString = '20211028';
+
 dataFolder = [dataRoot dateString filesep];
 
 % load in table with region categories
-image_key = readtable([dataRoot 'image_key_v2.csv']);
-% image_key = readtable('20211124\image_key.csv');
+image_key = readtable([dataRoot 'image_key.csv']);
 
 % specify granularity to use for chopping samples into finer grids
 snip_size = 176;
 scale_factor = 224/snip_size;
 
-% grain_size_cell = {'500_','5001','12mm','_2mm'};
-grain_size_cell = {'sand_'};
 for g = 1:length(grain_size_cell)
+  
     grain_size = grain_size_cell{g};
     % specify aggregate size to use
     snip_size_string = [num2str(grain_size) '_' num2str(snip_size)];
@@ -28,7 +35,7 @@ for g = 1:length(grain_size_cell)
     region_id_cell = image_key.region_code;
     
     % set writepath 
-    OutPath = ['..\built_data_v2\' dateString filesep snip_size_string filesep];
+    OutPath = ['..\built_data\' dateString filesep snip_size_string filesep];
     mkdir(OutPath)
     wb = waitbar(0,'generating image snips...');
     for f = 1:length(file_list)
