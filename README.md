@@ -10,8 +10,8 @@ Sickmann et al. Fingerprinting construction sandsupply networks for traceable so
 ```
 **Additional notes:**
 ```
-  -By default, these scripts will run on sand samples sieved at 2mm. See the comments at the top of each script for instructions on how to switch to 500um
-  -"build_input_data.m" was used to generate the sample snips contained in the "data" folder and is included for completeness. 
+1. By default, these scripts will run on sand samples sieved at 2mm. See the comments at the top of each script for instructions on how to switch to 500um
+2. "build_input_data.m" was used to generate the sample snips contained in the "data" folder and is included for completeness. 
    Email nlammers@uw.edu if you wish to have access to the raw images used to generate these image snips.
-  -"reviewer_responses.m" contains a handful of simple additional tests and calculates used to generate responses to reviewer questions
+3. "reviewer_responses.m" contains a handful of simple additional tests and calculates used to generate responses to reviewer questions
 ```
